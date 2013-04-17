@@ -11,6 +11,7 @@
  */
  
 class Event extends FullCalendarAppModel {
+<<<<<<< HEAD
 	
 	public $name = 'Event';
 	public $displayField = 'title';
@@ -81,10 +82,24 @@ class Event extends FullCalendarAppModel {
 				'required' => false,
 				//'last' => false, // Stop validation after this rule
 				'on' => 'create' // Limit validation to 'create' or 'update' operations
+=======
+	var $name = 'Event';
+	var $displayField = 'title';
+	var $validate = array(
+		'title' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+			),
+		),
+		'start' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+>>>>>>> 0a81214ecc580a23e40582955199df3ca7dadb99
 			),
 		)
 	);
 
+<<<<<<< HEAD
 	public $hasMany = array(
 		'EventAttendee' => array(
 			'className' => 'EventAttendee',
@@ -224,5 +239,14 @@ class Event extends FullCalendarAppModel {
 		}
 	}
 
+=======
+	var $belongsTo = array(
+		'EventType' => array(
+			'className' => 'FullCalendar.EventType',
+			'foreignKey' => 'event_type_id'
+		)
+	);
+
+>>>>>>> 0a81214ecc580a23e40582955199df3ca7dadb99
 }
 ?>
