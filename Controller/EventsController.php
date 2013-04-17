@@ -12,7 +12,6 @@
 
 class EventsController extends FullCalendarAppController {
 
-<<<<<<< HEAD
 	public $name = 'Events';
 	
 	public $helpers = array('Tools.Datetime','Attachment','Tools.GoogleMapV3');
@@ -552,74 +551,6 @@ class EventsController extends FullCalendarAppController {
 	 * @param string id This isn't doing anything?
 	 */
 	public function feed($id=null) {
-=======
-	var $name = 'Events';
-
-        var $paginate = array(
-            'limit' => 15
-        );
-
-        function index() {
-		$this->Event->recursive = 1;
-		$this->set('events', $this->paginate());
-	}
-
-	function view($id = null) {
-		if (!$id) {
-			$this->Session->setFlash(__('Invalid event', true));
-			$this->redirect(array('action' => 'index'));
-		}
-		$this->set('event', $this->Event->read(null, $id));
-	}
-
-	function add() {
-		if (!empty($this->data)) {
-			$this->Event->create();
-			if ($this->Event->save($this->data)) {
-				$this->Session->setFlash(__('The event has been saved', true));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The event could not be saved. Please, try again.', true));
-			}
-		}
-		$this->set('eventTypes', $this->Event->EventType->find('list'));
-	}
-
-	function edit($id = null) {
-		if (!$id && empty($this->data)) {
-			$this->Session->setFlash(__('Invalid event', true));
-			$this->redirect(array('action' => 'index'));
-		}
-		if (!empty($this->data)) {
-			if ($this->Event->save($this->data)) {
-				$this->Session->setFlash(__('The event has been saved', true));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The event could not be saved. Please, try again.', true));
-			}
-		}
-		if (empty($this->data)) {
-			$this->data = $this->Event->read(null, $id);
-		}
-		$this->set('eventTypes', $this->Event->EventType->find('list'));
-	}
-
-	function delete($id = null) {
-		if (!$id) {
-			$this->Session->setFlash(__('Invalid id for event', true));
-			$this->redirect(array('action'=>'index'));
-		}
-		if ($this->Event->delete($id)) {
-			$this->Session->setFlash(__('Event deleted', true));
-			$this->redirect(array('action'=>'index'));
-		}
-		$this->Session->setFlash(__('Event was not deleted', true));
-		$this->redirect(array('action' => 'index'));
-	}
-
-        // The feed action is called from "webroot/js/ready.js" to get the list of events (JSON)
-	function feed($id=null) {
->>>>>>> 0a81214ecc580a23e40582955199df3ca7dadb99
 		$this->layout = "ajax";
 		$vars = $this->params['url'];
 		$conditions = array('conditions' => array('UNIX_TIMESTAMP(start) >=' => $vars['start'], 'UNIX_TIMESTAMP(start) <=' => $vars['end']));
@@ -632,12 +563,9 @@ class EventsController extends FullCalendarAppController {
 				$allday = false;
 				$end = $event['Event']['end'];
 			}
-<<<<<<< HEAD
 			if(!empty($event['Place']['name'])){
 				$event['Event']['title'] = $event['Event']['title'].' @'.$event['Place']['name'].' '.$event['Place']['city'].', '.$event['StateRegion']['name'];
 			}
-=======
->>>>>>> 0a81214ecc580a23e40582955199df3ca7dadb99
 			$data[] = array(
 					'id' => $event['Event']['id'],
 					'title'=>$event['Event']['title'],
@@ -652,7 +580,6 @@ class EventsController extends FullCalendarAppController {
 		$this->set("json", json_encode($data));
 	}
 
-<<<<<<< HEAD
 	/**
 	 * This method handles rsvping a user
 	 * @param int $event_id The event id
@@ -677,10 +604,6 @@ class EventsController extends FullCalendarAppController {
 	 * The update action is called from "webroot/js/ready.js" to update date/time when an event is dragged or resized
 	 */
 	public function update() {
-=======
-        // The update action is called from "webroot/js/ready.js" to update date/time when an event is dragged or resized
-	function update() {
->>>>>>> 0a81214ecc580a23e40582955199df3ca7dadb99
 		$vars = $this->params['url'];
 		$this->Event->id = $vars['id'];
 		$this->Event->saveField('start', $vars['start']);
@@ -688,7 +611,6 @@ class EventsController extends FullCalendarAppController {
 		$this->Event->saveField('all_day', $vars['allday']);
 	}
 
-<<<<<<< HEAD
 	/**
 	 * This action controls what's show on the approval index
 	 * @author Rob Sawyer
@@ -824,7 +746,5 @@ class EventsController extends FullCalendarAppController {
 			return null;
 		}
 	}
-=======
->>>>>>> 0a81214ecc580a23e40582955199df3ca7dadb99
 }
 ?>

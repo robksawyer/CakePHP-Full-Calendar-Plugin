@@ -12,7 +12,6 @@
 
 class FullCalendarAppController extends AppController {
 
-<<<<<<< HEAD
 //	public $components = array('Acl', 'Session');
 	public $components = array(
 		'Session',
@@ -52,11 +51,6 @@ class FullCalendarAppController extends AppController {
     	'index/*'  => false
 	);
 
-=======
-//	var $components = array('Acl', 'Session');
-	var $components = array('Session');
-	var $helpers = array('Html', 'Form', 'Session', 'Js'=>array('Jquery'));
->>>>>>> 0a81214ecc580a23e40582955199df3ca7dadb99
 
 }
 ?>
