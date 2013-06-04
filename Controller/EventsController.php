@@ -41,8 +41,8 @@ class EventsController extends FullCalendarAppController {
 		if(!empty($month)){
 			$month = str_pad($month, 2, 0, STR_PAD_LEFT);
 		}
-		$this->Event->recursive = 1;
-		
+
+		$this->Event->recursive = 0;
 		$this->Event->contain(array('Country','EventType','Place','User','StateRegion'));
 		if(!empty($day)){
 			$default_conditions = array(
@@ -94,7 +94,9 @@ class EventsController extends FullCalendarAppController {
 
 		// Define conditions
 		$conditions = $this->FilterResults->getConditions();
-		$conditions = array_merge($conditions,$default_conditions);
+		if(!empty($default_conditions) && !empty($conditions)){
+			$conditions = array_merge($conditions,$default_conditions);
+		}
 		$this->FilterResults->setPaginate('conditions', $conditions);
 		//
 		//Find all of the events in the month
@@ -292,7 +294,10 @@ class EventsController extends FullCalendarAppController {
 			}
 		}
 
-		$attendeeStatus = $this->Event->EventAttendee->getUserStatus($this->current_user['id'],$id);
+		$attendeeStatus = '';
+		if(!empty($this->current_user['id'])){
+			$attendeeStatus = $this->Event->EventAttendee->getUserStatus($this->current_user['id'],$id);
+		}
 		$isActive = $this->Event->isActive($id);
 		$usersAttending = $this->Event->EventAttendee->getUsersForStatus(1,$id);
 		$usersPossiblyAttending = $this->Event->EventAttendee->getUsersForStatus(2,$id);
@@ -722,7 +727,8 @@ class EventsController extends FullCalendarAppController {
 	 * Convert 12 hour time to 24 hour time
 	 * @param string $timestamp
 	 */
-	public function convertTimeTo24($time){
+	public function convertTimeTo24($time = ''){
+		if(empty($time)) return;
 		return date('Y-m-d H:i', strtotime($time)); //Convert to 24hrs
 	}
 
@@ -731,6 +737,7 @@ class EventsController extends FullCalendarAppController {
 	 * @param string $timestamp
 	 */
 	public function convertTimeTo12($time){
+		if(empty($time)) return;
 		return date('Y-m-d h:i', strtotime($time)); //Convert to 24hrs
 	}
 
