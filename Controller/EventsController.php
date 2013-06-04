@@ -295,8 +295,9 @@ class EventsController extends FullCalendarAppController {
 		}
 
 		$attendeeStatus = '';
-		if(!empty($this->current_user['id'])){
-			$attendeeStatus = $this->Event->EventAttendee->getUserStatus($this->current_user['id'],$id);
+		$user_id = $this->Auth->user('id');
+		if(!empty($user_id)){
+			$attendeeStatus = $this->Event->EventAttendee->getUserStatus($user_id,$id);
 		}
 		$isActive = $this->Event->isActive($id);
 		$usersAttending = $this->Event->EventAttendee->getUsersForStatus(1,$id);
@@ -315,9 +316,10 @@ class EventsController extends FullCalendarAppController {
 			throw new NotFoundException(__('Invalid event'));
 		}
 		$this->Event->recursive = 2;
+		$user_id = $this->Auth->user('id');
 		$this->Event->contain(array(
 			'User'=>array('EventAttendee'=>array('conditions'=>array(
-					'EventAttendee.user_id' => $this->current_user['id'],
+					'EventAttendee.user_id' => $user_id,
 					'EventAttendee.event_id' => $id
 				) //This controls the not attending, attending, possibly buttons
 			)),
@@ -479,7 +481,8 @@ class EventsController extends FullCalendarAppController {
 		//
 		$event = $this->Event->read(null,$id);
 		//Only allow the user that submitted the event to edit it.
-		if($event['Event']['user_id'] != $this->current_user['id'] && $this->isAdmin() != true || $this->isSuperAdmin() != true){
+		$user_id = $this->Auth->user('id');
+		if($event['Event']['user_id'] != $user_id && $this->isAdmin() != true || $this->isSuperAdmin() != true){
 			$this->Session->setFlash(__('You are not allowed to edit this event.'));
 			$this->redirect($this->referer());
 		}
@@ -595,9 +598,14 @@ class EventsController extends FullCalendarAppController {
 		if($status > 2){
 			throw new NotFoundException(__('Invalid request'));
 		}
-		$currentStatus = $this->Event->EventAttendee->getStatus($this->current_user['id'],$event_id);
+		$user_id = $this->Auth->user('id');
+		$currentStatus = '';
+		if(!empty($user_id)){
+			return false;
+		}
+		$currentStatus = $this->Event->EventAttendee->getStatus($user_id,$event_id);
 		//The user doesn't have a current status
-		if($this->Event->EventAttendee->rsvp($this->current_user['id'],$event_id,$status)){
+		if($this->Event->EventAttendee->rsvp($user_id,$event_id,$status)){
 			$this->redirect(array('action' => 'view',$event_id));
 		}else{
 			$this->Session->setFlash(__('There was an error RSVPing you for the event. Please try again later.', true));
